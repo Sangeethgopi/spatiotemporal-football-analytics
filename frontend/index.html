@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Spatiotemporal Football Analytics Framework — MSc Data Science & AI thesis platform." />
+  <title>Spatiotemporal Football Analytics Framework</title>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #16324f;
+      --primary-dark: #0d2238;
+      --accent: #2563eb;
+      --accent-soft: #eff6ff;
+      --max-width: 1180px;
+      --radius: 14px;
+      --shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 42%, rgba(37, 99, 235, 0.06), transparent 32%),
+        var(--bg);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Subtle academic grid */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.35;
+      background-image:
+        linear-gradient(rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
+      z-index: -1;
+    }
+
+    .container {
+      width: min(var(--max-width), calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    /* Header */
+    .site-header {
+      height: 76px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+      background: rgba(248, 250, 252, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .nav {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-size: 0.98rem;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      color: white;
+      background: var(--primary);
+      font-size: 0.82rem;
+      box-shadow: 0 5px 14px rgba(22, 50, 79, 0.2);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 180ms ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--primary);
+    }
+
+    /* Hero */
+    .hero {
+      min-height: calc(100vh - 76px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 0 100px;
+    }
+
+    .hero-content {
+      width: min(900px, 100%);
+      text-align: center;
+      animation: rise 700ms cubic-bezier(.2, .75, .25, 1) both;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 12px;
+      margin-bottom: 26px;
+      border: 1px solid #dbe5f0;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      color: #475569;
+      font-size: 0.75rem;
+      font-weight: 650;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 0 auto;
+      color: var(--primary);
+      font-size: clamp(2.65rem, 6vw, 5rem);
+      line-height: 1.04;
+      letter-spacing: -0.055em;
+      font-weight: 760;
+    }
+
+    .hero-lead {
+      max-width: 760px;
+      margin: 30px auto 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      line-height: 1.8;
+    }
+
+    .hero-lead strong {
+      color: #334155;
+      font-weight: 650;
+    }
+
+    .actions {
+      margin-top: 38px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 0 23px;
+      border-radius: 10px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      font-size: 0.93rem;
+      font-weight: 650;
+      letter-spacing: -0.01em;
+      box-shadow: 0 10px 24px rgba(22, 50, 79, 0.18);
+      transition:
+        transform 180ms ease,
+        background 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .cta:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(22, 50, 79, 0.23);
+    }
+
+    .cta:focus-visible {
+      outline: 3px solid rgba(37, 99, 235, 0.28);
+      outline-offset: 3px;
+    }
+
+    .cta-arrow {
+      margin-left: 10px;
+      font-size: 1.05rem;
+      transition: transform 180ms ease;
+    }
+
+    .cta:hover .cta-arrow {
+      transform: translateX(3px);
+    }
+
+    .secondary {
+      display: inline-flex;
+      align-items: center;
+      min-height: 50px;
+      padding: 0 20px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: #475569;
+      background: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.93rem;
+      font-weight: 600;
+      transition: border-color 180ms ease, color 180ms ease;
+    }
+
+    .secondary:hover {
+      border-color: #cbd5e1;
+      color: var(--primary);
+    }
+
+    /* Research metadata */
+    .research-strip {
+      margin: 70px auto 0;
+      width: min(760px, 100%);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .research-item {
+      padding: 18px 16px;
+      text-align: center;
+    }
+
+    .research-item + .research-item {
+      border-left: 1px solid var(--border);
+    }
+
+    .research-label {
+      color: #94a3b8;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+    }
+
+    .research-value {
+      margin-top: 5px;
+      color: #334155;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .scroll-note {
+      margin-top: 34px;
+      color: #94a3b8;
+      font-size: 0.74rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      .site-header {
+        height: 68px;
+      }
+
+      .container {
+        width: min(100% - 28px, var(--max-width));
+      }
+
+      .nav-links a:not(:last-child) {
+        display: none;
+      }
+
+      .brand {
+        font-size: 0.9rem;
+      }
+
+      .brand-mark {
+        width: 31px;
+        height: 31px;
+      }
+
+      .hero {
+        min-height: calc(100vh - 68px);
+        padding: 60px 0 70px;
+      }
+
+      h1 {
+        font-size: clamp(2.35rem, 12vw, 3.5rem);
+      }
+
+      .hero-lead {
+        font-size: 0.98rem;
+        line-height: 1.7;
+      }
+
+      .research-strip {
+        grid-template-columns: 1fr;
+        margin-top: 48px;
+      }
+
+      .research-item + .research-item {
+        border-left: 0;
+        border-top: 1px solid var(--border);
+      }
+
+      .actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .cta,
+      .secondary {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="Spatiotemporal Football Analytics Framework home">
+        <span class="brand-mark">SF</span>
+        <span>Football Analytics Framework</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#research">Research</a>
+        <a href="dashboard.html">Dashboard</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="research">
+      <div class="hero-content">
+        <div class="eyebrow">
+          <span class="eyebrow-dot" aria-hidden="true"></span>
+          MSc Data Science &amp; AI Thesis
+        </div>
+
+        <h1>Spatiotemporal Football Analytics Framework</h1>
+
+        <p class="hero-lead">
+          A <strong>temporally causal, data-driven framework</strong> for estimating
+          and detecting turnover-associated pressing dynamics from football tracking
+          data and computer vision. The platform transforms player movement and
+          event context into interpretable analytical signals for studying
+          pressing behaviour around possession turnovers.
+        </p>
+
+        <div class="actions">
+          <a class="cta" href="dashboard.html">
+            Launch Platform
+            <span class="cta-arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="secondary" href="#methodology">View Research Scope</a>
+        </div>
+
+        <div class="research-strip" id="methodology" aria-label="Research focus">
+          <div class="research-item">
+            <div class="research-label">Data</div>
+            <div class="research-value">Tracking + Event Context</div>
+          </div>
+          <div class="research-item">
+            <div class="research-label">Method</div>
+            <div class="research-value">Temporal &amp; Spatial Analysis</div>
+          </div>
+          <div class="research-item">
+            <div class="research-label">Application</div>
+            <div class="research-value">Pressing &amp; Turnover Detection</div>
+          </div>
+        </div>
+
+        <p class="scroll-note">RESEARCH • COMPUTATIONAL FOOTBALL • ANALYTICS</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Lightweight interaction: prevent navigation errors if dashboard.html
+    // has not been created yet and provide a clear developer-console message.
+    document.querySelectorAll('a[href="dashboard.html"]').forEach((link) => {
+      link.addEventListener("click", () => {
+        console.info("Navigating to dashboard.html");
+      });
+    });
+  </script>
+</body>
+</html>
