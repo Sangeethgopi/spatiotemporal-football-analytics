@@ -29,15 +29,15 @@ def run_tracking(video_path: str, output_path: str):
     results = []
     for i, r in enumerate(results_generator):
         results.append(r)
-        # Limit to 150 frames (6 seconds) for prototype to prevent Streamlit from timing out
-        if i >= 150:
-            break
+        if (i + 1) % 500 == 0:
+            print(f"  Tracked {i + 1} frames...")
             
-    print(f"Tracking complete for first 150 frames.")
+    print(f"Tracking complete: {len(results)} frames processed.")
     
     # We also want to export the tracking data to a CSV for our pipeline
     # The results object contains bounding boxes and tracking IDs for every frame.
-    export_tracking_data(results, output_path.replace('.mp4', '_tracking.csv'))
+    csv_out = output_path.replace('.mp4', '_tracking.csv')
+    export_tracking_data(results, csv_out)
 
 def export_tracking_data(results, csv_path):
     import pandas as pd
