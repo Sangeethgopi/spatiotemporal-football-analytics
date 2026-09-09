@@ -1,0 +1,27 @@
+{
+    "synthetic_to_synthetic": {
+        "event_f1": 0.6,
+        "threshold": 0.5,
+        "smooth_s": 1.0,
+        "n_gt": 19,
+        "roc_auc": 0.927
+    },
+    "synthetic_to_real": {
+        "event_f1": 0.0,
+        "threshold": 0.5,
+        "smooth_s": 1.0,
+        "n_gt": 20,
+        "roc_auc": 0.755
+    },
+    "real_to_real": {
+        "event_f1": 0.6037735849056605,
+        "threshold": 0.15,
+        "smooth_s": 3.0,
+        "n_gt": 23,
+        "roc_auc": 0.8366315289537382,
+        "f1_ci": [
+            0.4897959183673469,
+            0.7017543859649124
+        ]
+    }
+}

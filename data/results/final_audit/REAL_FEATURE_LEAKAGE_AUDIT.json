@@ -1,0 +1,16 @@
+{
+    "audit_type": "Feature Causality and Leakage",
+    "status": "SAFE",
+    "causality_checks": {
+        "spatial_features": "CAUSAL (current frame only)",
+        "rolling_features": "CAUSAL (center=False, past frames only)",
+        "derivative_features": "CAUSAL (backward diff only)"
+    },
+    "boundary_bleed_analysis": {
+        "issue": "Rolling window uses past 25 frames. First 25 test frames use pre-split frames.",
+        "pre_split_frames_used": "Purge zone (100608-100631)",
+        "leakage_status": "NONE (Purge zone is excluded from validation. No train/val data enters test evaluation.)"
+    },
+    "normalisation": "None applied",
+    "verdict": "All features are strictly causal. No future or training leakage."
+}

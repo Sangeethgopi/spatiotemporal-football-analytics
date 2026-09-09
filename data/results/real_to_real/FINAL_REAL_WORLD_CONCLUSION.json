@@ -1,0 +1,63 @@
+{
+    "research_question": "Can a model trained on real professional football tracking data generalise to an unseen real football match for turnover-associated press-trigger detection?",
+    "answer": "Yes — with appropriate threshold selection and causal temporal smoothing.",
+    
+    "three_way_comparison": {
+        "synthetic_to_synthetic": {
+            "train": "Synthetic Match 1 (70%)", "test": "Synthetic Match 1 (30%)",
+            "event_f1": 0.600, "threshold": 0.50, "smooth_s": 1.0,
+            "tp": 9, "fp": 2, "fn": 10, "n_gt": 19, "roc_auc": 0.927,
+            "classification": "INTERNAL — synthetic development evaluation"
+        },
+        "synthetic_to_real": {
+            "train": "Synthetic Match 1 (70%)", "test": "Real Metrica Match 2",
+            "event_f1": 0.000, "threshold": 0.50, "smooth_s": 1.0,
+            "tp": 0, "fp": 0, "fn": 20, "n_gt": 20, "roc_auc": 0.755,
+            "classification": "FAILED — calibration mismatch, threshold never triggered"
+        },
+        "real_to_real": {
+            "train": "Real Metrica Match 2", "test": "Real Metrica Match 3 (30% holdout)",
+            "event_f1": 0.604, "threshold": 0.15, "smooth_s": 3.0,
+            "event_precision": 0.533, "event_recall": 0.696,
+            "tp": 16, "fp": 14, "fn": 7, "n_gt": 23, "n_pred": 34,
+            "roc_auc": 0.837, "pr_auc": 0.238,
+            "bootstrap_ci_95": [0.490, 0.702],
+            "classification": "PRIMARY RESULT — genuine external holdout on real tracking"
+        }
+    },
+    
+    "smoothing_sensitivity_validation": {
+        "0s":   {"val_f1": 0.366, "threshold": 0.50},
+        "0.5s": {"val_f1": 0.496, "threshold": 0.40},
+        "1.0s": {"val_f1": 0.515, "threshold": 0.25},
+        "1.5s": {"val_f1": 0.562, "threshold": 0.25},
+        "2.0s": {"val_f1": 0.591, "threshold": 0.20},
+        "3.0s": {"val_f1": 0.618, "threshold": 0.15, "frozen": true}
+    },
+    
+    "model_comparison_validation": {
+        "LogReg":          {"val_f1": 0.502, "roc_auc": 0.801},
+        "RandomForest":    {"val_f1": 0.461, "roc_auc": 0.827},
+        "HistGB":          {"val_f1": 0.618, "roc_auc": 0.825, "selected": true},
+        "HistGB_balanced": {"val_f1": 0.389, "roc_auc": 0.826}
+    },
+    
+    "bottleneck_classification": {
+        "primary": "A — Synthetic-data mismatch (confirmed and resolved by training on real data)",
+        "secondary": "B — Tracking/perception quality (broadcast-CV ball coverage insufficient for deployment)",
+        "not_limiting": ["E — Model capacity", "D — Feature representation (partially adequate)"]
+    },
+    
+    "primary_dissertation_result": {
+        "train": "Metrica Match 2 (real professional tracking)",
+        "test": "Metrica Match 3 (final 30%, held out)",
+        "event_f1": 0.604,
+        "bootstrap_ci_95": [0.490, 0.702],
+        "event_precision": 0.533,
+        "event_recall": 0.696,
+        "roc_auc": 0.837,
+        "threshold": 0.15,
+        "smooth_window_s": 3.0,
+        "note": "This is the scientifically primary result — real data, genuine holdout, threshold selected on validation"
+    }
+}

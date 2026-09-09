@@ -1,0 +1,16 @@
+{
+    "match_2": {
+        "n_frames": 141156,
+        "fps": 25,
+        "ball_coverage": 59.0,
+        "events_3m": 78,
+        "events_uncoupled": 102
+    },
+    "match_3": {
+        "n_frames": 143761,
+        "fps": 25,
+        "ball_coverage": 67.8,
+        "events_3m": 84,
+        "events_uncoupled": 109
+    }
+}

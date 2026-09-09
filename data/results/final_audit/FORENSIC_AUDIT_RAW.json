@@ -1,0 +1,321 @@
+{
+    "reproduction": {
+        "reported_f1": 0.6038,
+        "reproduced_f1": 0.6037735849056605,
+        "match": true,
+        "reported_tp": 16,
+        "reproduced_tp": 16,
+        "reported_fp": 14,
+        "reproduced_fp": 14,
+        "reported_fn": 7,
+        "reproduced_fn": 7,
+        "reported_gt": 23,
+        "reproduced_gt": 23
+    },
+    "split_audit": {
+        "n3": 143761,
+        "val_split": 100632,
+        "val_frames": 100532,
+        "test_frames": 43129,
+        "purge_frames": 100,
+        "val_test_overlap": false,
+        "reported_val_matches": true,
+        "reported_test_matches": true
+    },
+    "boundary_leakage": {
+        "test_turnover_labels_bleeding_into_val": 0,
+        "boundary_feature_bleed_frames": 25,
+        "severity": "Minor \u2014 first 25 TEST frames use purge-zone feature history (not val). Not future leakage."
+    },
+    "possession_causality": "CAUSAL \u2014 strictly forward scanning, no future frames",
+    "feature_causality": "CAUSAL \u2014 all rolling features use center=False, all diffs use past-only",
+    "smoothing_causality": "CAUSAL \u2014 rolling(75, center=False) on TEST-region probabilities only",
+    "calibration": "None applied",
+    "bootstrap_ci": {
+        "lo": 0.4897959183673469,
+        "hi": 0.7017543859649124,
+        "note": "FP held fixed \u2014 approximate"
+    },
+    "event_table": [
+        {
+            "gt_id": 1,
+            "gt_start_frame": 101300,
+            "gt_end_frame": 101400,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 2,
+            "gt_start_frame": 104112,
+            "gt_end_frame": 104212,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 3,
+            "gt_start_frame": 107112,
+            "gt_end_frame": 107212,
+            "gt_duration_frames": 100,
+            "outcome": "FN"
+        },
+        {
+            "gt_id": 4,
+            "gt_start_frame": 107873,
+            "gt_end_frame": 107973,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 5,
+            "gt_start_frame": 108473,
+            "gt_end_frame": 108573,
+            "gt_duration_frames": 100,
+            "outcome": "FN"
+        },
+        {
+            "gt_id": 6,
+            "gt_start_frame": 114004,
+            "gt_end_frame": 114104,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 7,
+            "gt_start_frame": 115745,
+            "gt_end_frame": 115845,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 8,
+            "gt_start_frame": 117126,
+            "gt_end_frame": 117226,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 9,
+            "gt_start_frame": 117616,
+            "gt_end_frame": 117716,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 10,
+            "gt_start_frame": 118818,
+            "gt_end_frame": 118918,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 11,
+            "gt_start_frame": 121700,
+            "gt_end_frame": 121800,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 12,
+            "gt_start_frame": 122300,
+            "gt_end_frame": 122400,
+            "gt_duration_frames": 100,
+            "outcome": "FN"
+        },
+        {
+            "gt_id": 13,
+            "gt_start_frame": 123812,
+            "gt_end_frame": 123912,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 14,
+            "gt_start_frame": 124072,
+            "gt_end_frame": 124172,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 15,
+            "gt_start_frame": 124367,
+            "gt_end_frame": 124467,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 16,
+            "gt_start_frame": 125823,
+            "gt_end_frame": 125923,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 17,
+            "gt_start_frame": 128309,
+            "gt_end_frame": 128409,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 18,
+            "gt_start_frame": 139654,
+            "gt_end_frame": 139754,
+            "gt_duration_frames": 100,
+            "outcome": "FN"
+        },
+        {
+            "gt_id": 19,
+            "gt_start_frame": 140655,
+            "gt_end_frame": 140755,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "gt_id": 20,
+            "gt_start_frame": 141905,
+            "gt_end_frame": 142005,
+            "gt_duration_frames": 100,
+            "outcome": "FN"
+        },
+        {
+            "gt_id": 21,
+            "gt_start_frame": 142027,
+            "gt_end_frame": 142127,
+            "gt_duration_frames": 100,
+            "outcome": "FN"
+        },
+        {
+            "gt_id": 22,
+            "gt_start_frame": 142214,
+            "gt_end_frame": 142314,
+            "gt_duration_frames": 100,
+            "outcome": "FN"
+        },
+        {
+            "gt_id": 23,
+            "gt_start_frame": 142432,
+            "gt_end_frame": 142532,
+            "gt_duration_frames": 100,
+            "outcome": "TP"
+        },
+        {
+            "pred_id": 2,
+            "pred_start_frame": 103185,
+            "pred_end_frame": 103189,
+            "pred_duration_frames": 4,
+            "max_prob": 0.15462241260158308,
+            "outcome": "FP"
+        },
+        {
+            "pred_id": 5,
+            "pred_start_frame": 107613,
+            "pred_end_frame": 107678,
+            "pred_duration_frames": 65,
+            "max_prob": 0.1925112357292088,
+            "outcome": "FP"
+        },
+        {
+            "pred_id": 8,
+            "pred_start_frame": 114439,
+            "pred_end_frame": 114551,
+            "pred_duration_frames": 112,
+            "max_prob": 0.4050952439180363,
+            "outcome": "FP"
+        },
+        {
+            "pred_id": 9,
+            "pred_start_frame": 114623,
+            "pred_end_frame": 114718,
+            "pred_duration_frames": 95,
+            "max_prob": 0.21151766256194957,
+            "outcome": "FP"
+        },
+        {
+            "pred_id": 16,
+            "pred_start_frame": 120368,
+            "pred_end_frame": 120430,
+            "pred_duration_frames": 62,
+            "max_prob": 0.20808259491135342,
+            "outcome": "FP"
+        },
+        {
+            "pred_id": 17,
+            "pred_start_frame": 121427,
+            "pred_end_frame": 121439,
+            "pred_duration_frames": 12,
+            "max_prob": 0.1560535648291335,
+            "outcome": "FP"
+        },
+        {
+            "pred_id": 19,
+            "pred_start_frame": 122983,
+            "pred_end_frame": 123054,
+            "pred_duration_frames": 71,
+            "max_prob": 0.19611470464648026,
+            "outcome": "FP"
+        },
+        {
+            "pred_id": 23,
+            "pred_start_frame": 125683,
+            "pred_end_frame": 125749,
+            "pred_duration_frames": 66,
+            "max_prob": 0.22445952329867688,
+            "outcome": "FP"
+        },
+        {
+            "pred_id": 27,
+            "pred_start_frame": 128477,
+            "pred_end_frame": 128485,
+            "pred_duration_frames": 8,
+            "max_prob": 0.15323521346697982,
+            "outcome": "FP"
+        },
+        {
+            "pred_id": 28,
+            "pred_start_frame": 131151,
+            "pred_end_frame": 131256,
+            "pred_duration_frames": 105,
+            "max_prob": 0.33018048494553615,
+            "outcome": "FP"
+        },
+        {
+            "pred_id": 29,
+            "pred_start_frame": 131629,
+            "pred_end_frame": 131689,
+            "pred_duration_frames": 60,
+            "max_prob": 0.21621441783332648,
+            "outcome": "FP"
+        },
+        {
+            "pred_id": 30,
+            "pred_start_frame": 135796,
+            "pred_end_frame": 135840,
+            "pred_duration_frames": 44,
+            "max_prob": 0.1874403893177699,
+            "outcome": "FP"
+        },
+        {
+            "pred_id": 31,
+            "pred_start_frame": 136392,
+            "pred_end_frame": 136398,
+            "pred_duration_frames": 6,
+            "max_prob": 0.1514734769304874,
+            "outcome": "FP"
+        },
+        {
+            "pred_id": 32,
+            "pred_start_frame": 139126,
+            "pred_end_frame": 139145,
+            "pred_duration_frames": 19,
+            "max_prob": 0.16572162178912256,
+            "outcome": "FP"
+        }
+    ],
+    "math_consistency": {
+        "tp_plus_fp_equals_pred_events": false,
+        "tp_plus_fn_equals_gt_events": true,
+        "precision_computed": 0.5333333333333333,
+        "recall_computed": 0.6956521739130435,
+        "f1_computed": 0.6037735849056605
+    }
+}

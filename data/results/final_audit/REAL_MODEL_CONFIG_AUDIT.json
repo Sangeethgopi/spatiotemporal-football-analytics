@@ -1,0 +1,19 @@
+{
+    "audit_type": "Model Configuration",
+    "status": "SAFE",
+    "frozen_hyperparameters": {
+        "model_class": "HistGradientBoostingClassifier",
+        "learning_rate": 0.04,
+        "max_leaf_nodes": 15,
+        "l2_regularization": 1.5,
+        "class_weight": null
+    },
+    "calibration": {
+        "applied": false
+    },
+    "leakage_check": {
+        "hyperparameters_tuned_on_test": false,
+        "calibration_fitted_on_test": false
+    },
+    "verdict": "Model configuration safely frozen before test evaluation."
+}

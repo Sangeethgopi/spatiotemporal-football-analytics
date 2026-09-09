@@ -1,0 +1,16 @@
+{
+    "audit_type": "Threshold and Smoothing Post-Processing",
+    "status": "SAFE",
+    "smoothing_implementation": {
+        "function": "pandas.Series.rolling(75, center=False)",
+        "causality": "Strictly causal",
+        "boundary_bleed": "None (applied to test slice only)"
+    },
+    "selection_protocol": {
+        "frozen_smoothing_s": 3.0,
+        "frozen_threshold": 0.15,
+        "selected_via_validation_only": true,
+        "test_set_touched_during_selection": false
+    },
+    "verdict": "Smoothing is strictly causal. Threshold was safely frozen using validation data only."
+}

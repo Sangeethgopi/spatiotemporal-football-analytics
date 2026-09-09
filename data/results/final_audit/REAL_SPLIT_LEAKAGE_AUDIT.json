@@ -1,0 +1,19 @@
+{
+    "audit_type": "Data Split and Boundary Leakage",
+    "status": "SAFE",
+    "frame_counts": {
+        "match_total": 143761,
+        "val": 100532,
+        "purge": 100,
+        "test": 43129
+    },
+    "overlap_check": {
+        "val_test_intersect": 0,
+        "is_disjoint": true
+    },
+    "boundary_leakage": {
+        "test_events_bleeding_into_val": 0,
+        "test_events_bleeding_into_purge": 0
+    },
+    "verdict": "Chronological holdout is mathematically clean. No label leakage."
+}

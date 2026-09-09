@@ -1,0 +1,31 @@
+{
+    "0s": {
+        "best_val_f1": 0.36559139784946243,
+        "best_threshold": 0.5
+    },
+    "0.5s": {
+        "best_val_f1": 0.49624060150375937,
+        "best_threshold": 0.4
+    },
+    "1.0s": {
+        "best_val_f1": 0.5149700598802395,
+        "best_threshold": 0.25
+    },
+    "1.5s": {
+        "best_val_f1": 0.5616438356164384,
+        "best_threshold": 0.25
+    },
+    "2.0s": {
+        "best_val_f1": 0.5906040268456376,
+        "best_threshold": 0.2
+    },
+    "3.0s": {
+        "best_val_f1": 0.6184210526315789,
+        "best_threshold": 0.15
+    },
+    "_frozen": {
+        "smooth_window_s": 3.0,
+        "threshold": 0.15,
+        "val_f1": 0.6184210526315789
+    }
+}

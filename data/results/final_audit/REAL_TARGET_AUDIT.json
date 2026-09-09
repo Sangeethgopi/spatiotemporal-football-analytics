@@ -1,0 +1,16 @@
+{
+    "audit_type": "Target Construction and Possession",
+    "status": "SAFE",
+    "possession_algorithm": {
+        "scan_direction": "Forward only",
+        "future_lookahead": false,
+        "causality": "Strictly causal"
+    },
+    "target_construction": {
+        "uses_future_information": true,
+        "reason": "Supervised label definition (requires 3.0s future hold to validate turnover)",
+        "leaks_to_features": false
+    },
+    "uniformity": "Identical target construction on Match 2 and Match 3",
+    "verdict": "Target is correctly constructed as a supervised goal without causing feature leakage."
+}

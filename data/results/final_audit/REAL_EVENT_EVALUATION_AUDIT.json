@@ -1,0 +1,23 @@
+{
+    "audit_type": "Event Evaluation Accounting",
+    "status": "SAFE_WITH_NOTE",
+    "test_set_accounting": {
+        "n_gt_events": 23,
+        "n_pred_events": 34,
+        "tp_gt_matched": 16,
+        "fp_preds_unmatched": 14,
+        "fn_gt_unmatched": 7,
+        "preds_matched_to_gt": 20
+    },
+    "math_consistency": {
+        "tp_plus_fn_equals_gt": true,
+        "tp_plus_fp_equals_preds": false,
+        "reason_for_mismatch": "Multiple predicted events can cover a single GT event. TP counts unique GT events matched (16) rather than unique predictions matched (20)."
+    },
+    "precision_logic": {
+        "formula": "TP / (TP + FP)",
+        "result": 0.5333,
+        "note": "Hybrid formula penalises fragmentation slightly. Internally consistent across all dissertation experiments."
+    },
+    "verdict": "Accounting verified. Metric implementation is internally consistent with all prior results."
+}

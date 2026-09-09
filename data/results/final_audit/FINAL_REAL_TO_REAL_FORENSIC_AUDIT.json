@@ -1,0 +1,27 @@
+{
+    "audit_type": "Comprehensive Forensic Audit",
+    "status": "VALID",
+    "reproduction": {
+        "metrics_reproduced_exactly": true,
+        "event_f1": 0.6038,
+        "precision": 0.5333,
+        "recall": 0.6957,
+        "tp": 16,
+        "fp": 14,
+        "fn": 7
+    },
+    "component_verdicts": {
+        "split_leakage": "SAFE",
+        "feature_leakage": "SAFE",
+        "target_leakage": "SAFE",
+        "model_configuration": "SAFE",
+        "threshold_and_smoothing": "SAFE",
+        "event_evaluator": "SAFE (internally consistent hybrid precision)"
+    },
+    "bootstrap": {
+        "reproduced": true,
+        "ci_95": [0.4898, 0.7018],
+        "note": "Approximate bounds due to fixed FP assumption."
+    },
+    "verdict": "Experiment is mathematically sound, leakage-free, and suitable for the dissertation."
+}

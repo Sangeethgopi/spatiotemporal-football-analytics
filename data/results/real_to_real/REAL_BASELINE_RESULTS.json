@@ -1,0 +1,117 @@
+{
+    "design": {
+        "train": "Metrica Match 2 (real, full, 141156 frames)",
+        "val": "Metrica Match 3, first 70% minus purge (100532 frames)",
+        "test": "Metrica Match 3, final 30% (43129 frames)",
+        "note": "TEST was untouched until this final evaluation"
+    },
+    "frozen_config": {
+        "smooth_window_s": 3.0,
+        "smooth_frames": 75,
+        "threshold": 0.15,
+        "model": "HistGradientBoosting"
+    },
+    "validation_results": {
+        "smoothing_sensitivity": {
+            "0s": {
+                "val_f1": 0.366,
+                "threshold": 0.5
+            },
+            "0.5s": {
+                "val_f1": 0.496,
+                "threshold": 0.4
+            },
+            "1.0s": {
+                "val_f1": 0.515,
+                "threshold": 0.25
+            },
+            "1.5s": {
+                "val_f1": 0.562,
+                "threshold": 0.25
+            },
+            "2.0s": {
+                "val_f1": 0.591,
+                "threshold": 0.2
+            },
+            "3.0s": {
+                "val_f1": 0.618,
+                "threshold": 0.15
+            }
+        },
+        "model_comparison": {
+            "LogReg": {
+                "val_f1": 0.502,
+                "roc_auc": 0.801
+            },
+            "RandomForest": {
+                "val_f1": 0.461,
+                "roc_auc": 0.827
+            },
+            "HistGB": {
+                "val_f1": 0.618,
+                "roc_auc": 0.825
+            },
+            "HistGB_balanced": {
+                "val_f1": 0.389,
+                "roc_auc": 0.826
+            }
+        }
+    },
+    "test_results": {
+        "at_frozen_threshold": {
+            "event_f1": 0.6037735849056605,
+            "event_prec": 0.5333333333333333,
+            "event_rec": 0.6956521739130435,
+            "tp": 16,
+            "fp": 14,
+            "fn": 7,
+            "n_gt": 23,
+            "n_pred": 34,
+            "roc_auc": 0.8366315289537382,
+            "pr_auc": 0.2377110117183351,
+            "f_prec": 0.2918287937743191,
+            "f_rec": 0.29347826086956524,
+            "f_f1": 0.29265120312161286
+        },
+        "at_050_for_comparability": {
+            "event_f1": 0.08333333333333333,
+            "tp": 1,
+            "fp": 0,
+            "fn": 22
+        },
+        "bootstrap_uncertainty": {
+            "f1_point": 0.6037735849056605,
+            "f1_mean_boot": 0.6015789649815155,
+            "ci_2.5": 0.4897959183673469,
+            "ci_97.5": 0.7017543859649124,
+            "n_gt_events": 23
+        }
+    },
+    "comparison_with_synthetic": {
+        "synthetic_to_synthetic": {
+            "event_f1": 0.6,
+            "threshold": 0.5,
+            "smooth_s": 1.0,
+            "n_gt": 19,
+            "roc_auc": 0.927
+        },
+        "synthetic_to_real": {
+            "event_f1": 0.0,
+            "threshold": 0.5,
+            "smooth_s": 1.0,
+            "n_gt": 20,
+            "roc_auc": 0.755
+        },
+        "real_to_real": {
+            "event_f1": 0.6037735849056605,
+            "threshold": 0.15,
+            "smooth_s": 3.0,
+            "n_gt": 23,
+            "roc_auc": 0.8366315289537382,
+            "f1_ci": [
+                0.4897959183673469,
+                0.7017543859649124
+            ]
+        }
+    }
+}

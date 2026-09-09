@@ -1,0 +1,20 @@
+{
+    "1": {
+        "n_events_3m": 102,
+        "n_events_uncoupled": 123,
+        "positive_frames": 10175,
+        "prevalence": 0.07016951022716302
+    },
+    "2": {
+        "n_events_3m": 78,
+        "n_events_uncoupled": 102,
+        "positive_frames": 7799,
+        "prevalence": 0.0552509280512341
+    },
+    "3": {
+        "n_events_3m": 84,
+        "n_events_uncoupled": 109,
+        "positive_frames": 8376,
+        "prevalence": 0.05826336767273461
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "decision": "YES",
+    "primary_metric": 0.6038,
+    "confidence_interval": [0.490, 0.702],
+    "justification": "Experiment is completely leakage-free and grounded in genuine tracking data rather than deterministic synthetic simulation.",
+    "required_caveats": [
+        "Target is an operational proxy (3.0m rule), not true intent.",
+        "Validation and test sets share the same match (Match 3) via chronological split, meaning match-specific tactics could inflate validation-test transfer.",
+        "Evaluator precision uses a hybrid formula that slightly penalises fragmentation."
+    ]
+}
