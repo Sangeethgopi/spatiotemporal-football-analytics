@@ -274,3 +274,78 @@ def extract_top_press_triggers(
     ] if c in df.columns]
 
     return df.loc[selected_indices, cols_to_keep].reset_index(drop=True)
+
+
+def evaluate_events(
+    y_true: np.ndarray,
+    y_prob: np.ndarray,
+    threshold: float = 0.5,
+    tolerance_frames: int = 50
+):
+    import numpy as np
+    y_pred = (y_prob >= threshold).astype(int)
+    
+    # Extract contiguous predicted events
+    pred_events = []
+    in_event = False
+    start_idx = 0
+    for i in range(len(y_pred)):
+        if y_pred[i] == 1 and not in_event:
+            in_event = True
+            start_idx = i
+        elif y_pred[i] == 0 and in_event:
+            in_event = False
+            pred_events.append((start_idx, i))
+    if in_event:
+        pred_events.append((start_idx, len(y_pred)))
+        
+    # Extract contiguous true events
+    true_events = []
+    in_event = False
+    start_idx = 0
+    for i in range(len(y_true)):
+        if y_true[i] == 1 and not in_event:
+            in_event = True
+            start_idx = i
+        elif y_true[i] == 0 and in_event:
+            in_event = False
+            true_events.append((start_idx, i))
+    if in_event:
+        true_events.append((start_idx, len(y_true)))
+        
+    matched_true = set()
+    matched_pred = set()
+    tp = 0
+    
+    for p_idx, (p_start, p_end) in enumerate(pred_events):
+        # Check if there is a true event within tolerance
+        for t_idx, (t_start, t_end) in enumerate(true_events):
+            if t_idx in matched_true:
+                continue
+            
+            t_expanded_start = t_start - tolerance_frames
+            t_expanded_end = t_end + tolerance_frames
+            
+            if (p_start <= t_expanded_end) and (p_end >= t_expanded_start):
+                tp += 1
+                matched_true.add(t_idx)
+                matched_pred.add(p_idx)
+                break
+                
+    fp = len(pred_events) - len(matched_pred)
+    fn = len(true_events) - len(matched_true)
+    
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+    f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
+    
+    return {
+        'event_precision': precision,
+        'event_recall': recall,
+        'event_f1': f1,
+        'event_tp': tp,
+        'event_fp': fp,
+        'event_fn': fn,
+        'total_pred_events': len(pred_events),
+        'total_true_events': len(true_events)
+    }

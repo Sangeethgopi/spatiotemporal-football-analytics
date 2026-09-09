@@ -65,7 +65,8 @@ def run_pipeline(
     n_frames = len(df_features)
     split_idx = int(n_frames * train_val_split_ratio)
 
-    df_train = df_features.iloc[:split_idx]
+    # Purged Temporal Split: Remove the lookahead horizon (100 frames) from the boundary to guarantee zero leakage
+    df_train = df_features.iloc[:split_idx - 100]
     df_val = df_features.iloc[split_idx:]
 
     y_train = df_train["target_press_trigger"].values

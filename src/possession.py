@@ -194,6 +194,8 @@ def label_turnover_horizons(
     """
     Creates weak binary supervision labels:
     `target_press_trigger` = 1 if defending team forces a turnover within horizon_frames (4.0s), else 0.
+    NOTE: The 100 positive frames represent a 4-second pre-event prediction horizon. 
+    They do NOT represent the physical chronological duration of the pressing event itself.
     Also computes multi-class tactical outcomes based on ball progression over the horizon.
     """
     df_labeled = df.copy()
