@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Press-Trigger Detection — MSc Dissertation Prototype</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+  :root { --navy:#0f1b2d; --navy2:#16243a; --navy3:#1e2d44; --cyan:#22d3ee; --indigo:#818cf8; --emerald:#34d399; --amber:#fb923c; --rose:#f87171; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--navy); color: #e2e8f0; font-family: Inter, system-ui, sans-serif; }
+  .glass { background: rgba(30,45,68,0.65); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.07); }
+  .metric-card { transition: transform 0.2s; } .metric-card:hover { transform: translateY(-3px); }
+  .tag { font-size:0.6rem; padding:2px 8px; border-radius:999px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; }
+  .tag-g { background:rgba(52,211,153,0.12); color:#34d399; } .tag-r { background:rgba(248,113,113,0.12); color:#f87171; }
+  .tag-c { background:rgba(34,211,238,0.12); color:#22d3ee; } .tag-p { background:rgba(129,140,248,0.12); color:#818cf8; }
+  .pitch { position:relative; width:100%; aspect-ratio:105/68; background:#16a34a; border-radius:8px; border:2px solid rgba(255,255,255,0.8); overflow:hidden; }
+  .pitch-line { position:absolute; background:rgba(255,255,255,0.7); }
+  .player { position:absolute; width:11px; height:11px; border-radius:50%; transform:translate(-50%,-50%); transition: left 0.15s linear, top 0.15s linear; }
+  .ball { position:absolute; width:9px; height:9px; border-radius:50%; background:#fff; border:2px solid #333; transform:translate(-50%,-50%); z-index:10; transition: left 0.15s linear, top 0.15s linear; }
+  .nav-link { transition: color 0.15s; } .nav-link:hover { color: var(--cyan); }
+  .stitle::after { content:''; display:block; width:40px; height:3px; margin-top:6px; background:linear-gradient(90deg,var(--cyan),var(--indigo)); border-radius:2px; }
+  .tab { padding:6px 16px; border-radius:8px; font-size:0.78rem; font-weight:600; cursor:pointer; border:1px solid transparent; transition:all 0.15s; }
+  .tab.on { background:rgba(34,211,238,0.1); color:var(--cyan); border-color:rgba(34,211,238,0.25); }
+  .tab:not(.on) { color:#64748b; } .tab:not(.on):hover { color:#e2e8f0; }
+  .bar-fill { transition: width 0.6s ease; }
+  canvas { max-height: 220px !important; }
+</style>
+</head>
+<body class="antialiased">
+
+<!-- NAV -->
+<nav class="fixed top-0 inset-x-0 z-50 glass border-b border-white/5">
+ <div class="max-w-7xl mx-auto px-4 h-12 flex items-center justify-between">
+  <div class="flex items-center gap-2">
+   <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-400 to-indigo-500 flex items-center justify-center text-white text-[10px] font-bold">PT</div>
+   <span class="font-bold text-xs tracking-tight">Press-Trigger Detection</span>
+   <span class="tag tag-c ml-1">Live Demo</span>
+  </div>
+  <div class="flex gap-4 text-[11px] font-medium text-slate-500">
+   <a href="#pitch" class="nav-link">Pitch</a>
+   <a href="#timeline" class="nav-link">Timeline</a>
+   <a href="#results" class="nav-link">Results</a>
+   <a href="#features" class="nav-link">Features</a>
+   <a href="#experiments" class="nav-link">Experiments</a>
+   <a href="#audit" class="nav-link">Audit</a>
+  </div>
+ </div>
+</nav>
+
+<!-- HERO -->
+<section class="pt-20 pb-12 px-4">
+ <div class="max-w-4xl mx-auto text-center">
+  <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-[10px] text-slate-400 font-semibold mb-5">
+   <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>MSc Data Science & AI — Working Prototype
+  </div>
+  <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+   <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-indigo-400 to-emerald-400">Turnover-Associated</span><br>
+   <span class="text-white">Press-Trigger Detection</span>
+  </h1>
+  <p class="text-slate-400 text-sm max-w-xl mx-auto mt-4 leading-relaxed">
+   Real-time demonstration using <strong class="text-white">actual Metrica professional tracking data</strong>. The model was trained on Match 2 and evaluated on the unseen final 30% of Match 3.
+  </p>
+  <div class="flex justify-center gap-3 mt-6">
+   <a href="#pitch" class="px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-indigo-500 text-white text-xs font-semibold shadow-lg shadow-cyan-500/20">Watch Live Pitch →</a>
+   <a href="#results" class="px-4 py-2 rounded-lg glass text-xs font-semibold text-slate-300">View Results</a>
+  </div>
+ </div>
+</section>
+
+<!-- ======== PITCH REPLAY ======== -->
+<section id="pitch" class="py-10 px-4">
+<div class="max-w-6xl mx-auto">
+ <h2 class="stitle text-xl font-bold mb-6">Live Pitch Replay — Test Set</h2>
+ <div class="grid lg:grid-cols-5 gap-4">
+  <!-- Pitch -->
+  <div class="lg:col-span-3 glass rounded-xl p-4">
+   <div class="flex items-center justify-between mb-2">
+    <div class="flex gap-3 text-[10px]">
+     <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>Defenders</span>
+     <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>Attackers</span>
+     <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-white border border-gray-500"></span>Ball</span>
+    </div>
+    <span class="text-[10px] text-slate-500" id="frameInfo">Loading...</span>
+   </div>
+   <div class="pitch" id="pitchEl">
+    <div class="pitch-line" style="left:50%;top:0;width:1px;height:100%"></div>
+    <div class="pitch-line" style="left:44%;top:25%;width:12%;height:50%;border:1px solid rgba(255,255,255,0.6);background:transparent;border-radius:0"></div>
+    <div style="position:absolute;left:50%;top:50%;width:15%;aspect-ratio:1;border:1px solid rgba(255,255,255,0.5);border-radius:50%;transform:translate(-50%,-50%)"></div>
+    <div class="pitch-line" style="left:0;top:30%;width:5%;height:40%;border:1px solid rgba(255,255,255,0.6);background:transparent"></div>
+    <div class="pitch-line" style="right:0;top:30%;width:5%;height:40%;border:1px solid rgba(255,255,255,0.6);background:transparent"></div>
+   </div>
+   <!-- Controls -->
+   <div class="flex items-center gap-3 mt-3">
+    <button onclick="togglePlay()" id="playBtn" class="px-3 py-1 rounded glass text-cyan-300 text-xs font-semibold cursor-pointer">⏸ Pause</button>
+    <input type="range" id="scrubber" min="0" max="100" value="0" class="flex-1 accent-cyan-400 h-1 cursor-pointer">
+    <select id="speedSel" onchange="setSpeed(this.value)" class="bg-transparent text-xs text-slate-400 border border-white/10 rounded px-1 py-0.5 cursor-pointer">
+     <option value="1" class="bg-slate-800">1×</option>
+     <option value="2" selected class="bg-slate-800">2×</option>
+     <option value="4" class="bg-slate-800">4×</option>
+     <option value="8" class="bg-slate-800">8×</option>
+    </select>
+   </div>
+  </div>
+
+  <!-- Right panel -->
+  <div class="lg:col-span-2 space-y-3">
+   <!-- Probability gauge -->
+   <div class="glass rounded-xl p-4">
+    <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-2">Press-Trigger Probability</div>
+    <div class="text-4xl font-bold font-mono" id="probNum" style="color:#64748b">0.00</div>
+    <div class="w-full h-3 bg-white/5 rounded-full overflow-hidden mt-2">
+     <div class="h-full rounded-full bar-fill" id="probBar" style="width:0%;background:rgba(255,255,255,0.08)"></div>
+    </div>
+    <div class="flex justify-between text-[9px] text-slate-600 mt-1">
+     <span>0.0</span><span class="text-amber-400 font-semibold">threshold = 0.15</span><span>1.0</span>
+    </div>
+   </div>
+   <!-- Status cards -->
+   <div class="grid grid-cols-2 gap-3">
+    <div class="glass rounded-xl p-3 text-center">
+     <div class="text-[10px] text-slate-500 uppercase">Ground Truth</div>
+     <div class="text-xl font-bold mt-1" id="gtLabel">—</div>
+    </div>
+    <div class="glass rounded-xl p-3 text-center">
+     <div class="text-[10px] text-slate-500 uppercase">Prediction</div>
+     <div class="text-xl font-bold mt-1" id="predLabel">—</div>
+    </div>
+   </div>
+   <!-- Mini stats -->
+   <div class="glass rounded-xl p-3">
+    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold mb-2">Live Features</div>
+    <div class="space-y-1.5 text-xs" id="liveFeats">
+     <div class="flex justify-between"><span class="text-slate-500">Closest Defender</span><span id="lf_d1">—</span></div>
+     <div class="flex justify-between"><span class="text-slate-500">Pressure Index</span><span id="lf_pi">—</span></div>
+     <div class="flex justify-between"><span class="text-slate-500">Defenders ≤5m</span><span id="lf_5m">—</span></div>
+     <div class="flex justify-between"><span class="text-slate-500">Ball Speed</span><span id="lf_bs">—</span></div>
+    </div>
+   </div>
+  </div>
+ </div>
+</div>
+</section>
+
+<!-- ======== PROBABILITY TIMELINE ======== -->
+<section id="timeline" class="py-10 px-4">
+<div class="max-w-6xl mx-auto">
+ <h2 class="stitle text-xl font-bold mb-6">Probability Timeline — Full Test Set</h2>
+ <div class="glass rounded-xl p-5">
+  <canvas id="timelineChart" height="200"></canvas>
+  <div class="text-[10px] text-slate-600 mt-2">Smoothed probability (cyan) vs ground truth regions (green shaded). Threshold at 0.15 (dashed).</div>
+ </div>
+</div>
+</section>
+
+<!-- ======== RESULTS ======== -->
+<section id="results" class="py-10 px-4">
+<div class="max-w-6xl mx-auto">
+ <h2 class="stitle text-xl font-bold mb-6">Primary Results — Real → Real</h2>
+ <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3" id="metricsGrid"></div>
+
+ <div class="grid sm:grid-cols-2 gap-4 mt-6">
+  <!-- Event accounting -->
+  <div class="glass rounded-xl p-4">
+   <div class="text-sm font-semibold mb-3">Event Accounting</div>
+   <div class="space-y-2 text-sm" id="eventAccounting"></div>
+  </div>
+  <!-- Smoothing sweep -->
+  <div class="glass rounded-xl p-4">
+   <div class="text-sm font-semibold mb-3">Smoothing Ablation (Validation)</div>
+   <div id="sweepBars" class="space-y-2"></div>
+  </div>
+ </div>
+</div>
+</section>
+
+<!-- ======== FEATURES ======== -->
+<section id="features" class="py-10 px-4">
+<div class="max-w-6xl mx-auto">
+ <h2 class="stitle text-xl font-bold mb-6">Feature Importance</h2>
+ <div class="glass rounded-xl p-5">
+  <canvas id="featChart" height="280"></canvas>
+ </div>
+</div>
+</section>
+
+<!-- ======== EXPERIMENTS ======== -->
+<section id="experiments" class="py-10 px-4">
+<div class="max-w-6xl mx-auto">
+ <h2 class="stitle text-xl font-bold mb-6">Experiment Comparison</h2>
+ <div class="flex gap-2 mb-4">
+  <button class="tab on" onclick="showExp(this,'real')">Real → Real</button>
+  <button class="tab" onclick="showExp(this,'synth')">Synthetic</button>
+  <button class="tab" onclick="showExp(this,'transfer')">Synth → Real</button>
+  <button class="tab" onclick="showExp(this,'perception')">Broadcast CV</button>
+ </div>
+ <div id="exp-real" class="glass rounded-xl p-5">
+  <span class="tag tag-g">PRIMARY RESULT</span>
+  <div class="grid sm:grid-cols-3 gap-4 mt-3 text-sm">
+   <div><div class="text-[10px] text-slate-500 uppercase">Train</div>Metrica Match 2 (141,156 fr)</div>
+   <div><div class="text-[10px] text-slate-500 uppercase">Val</div>Match 3 first 70% (100,532 fr)</div>
+   <div><div class="text-[10px] text-slate-500 uppercase">Test</div>Match 3 final 30% (43,129 fr)</div>
+  </div>
+  <div class="mt-3 p-3 rounded-lg" style="background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.12)">
+   <strong class="text-emerald-300">Event F1 = 0.604</strong> — Pipeline captures pressing on real tracking data
+  </div>
+ </div>
+ <div id="exp-synth" class="glass rounded-xl p-5 hidden">
+  <span class="tag tag-r">SYNTHETIC DEV ONLY</span>
+  <div class="mt-3 p-3 rounded-lg" style="background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.12)">
+   <div><strong class="text-amber-300">Event F1 = 0.600</strong> — <strong class="text-rose-300">NOT real-world evidence</strong></div>
+   <div class="text-xs text-slate-400 mt-2">The generator linearly interpolates defenders toward the ball during the 100 frames before transitions. Model memorised these deterministic patterns.</div>
+  </div>
+ </div>
+ <div id="exp-transfer" class="glass rounded-xl p-5 hidden">
+  <span class="tag tag-r">DOMAIN SHIFT</span>
+  <div class="grid sm:grid-cols-2 gap-4 mt-3">
+   <div class="p-3 rounded-lg" style="background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.12)">
+    <div class="text-[10px] text-slate-500 uppercase">At Threshold 0.50</div>
+    <div class="text-2xl font-bold text-rose-400 mt-1">Event F1 = 0.000</div>
+    <div class="text-xs text-slate-500 mt-1">Complete failure</div>
+   </div>
+   <div class="p-3 rounded-lg glass">
+    <div class="text-[10px] text-slate-500 uppercase">Probability Shift</div>
+    <div class="flex justify-between mt-2">
+     <div><div class="text-[10px] text-slate-500">Synth P99</div><div class="font-bold text-indigo-300">0.486</div></div>
+     <div class="text-xl text-slate-600">→</div>
+     <div><div class="text-[10px] text-slate-500">Real P99</div><div class="font-bold text-rose-300">0.097</div></div>
+    </div>
+   </div>
+  </div>
+ </div>
+ <div id="exp-perception" class="glass rounded-xl p-5 hidden">
+  <span class="tag tag-p">ENGINEERING DIAGNOSTIC</span>
+  <div class="grid sm:grid-cols-2 gap-4 mt-3 text-sm">
+   <div>
+    <div class="font-semibold mb-2">ByteTrack Baseline</div>
+    <div class="space-y-1 text-xs text-slate-400">
+     <div>• 1,729 unique IDs / 7,500 frames</div><div>• Median lifespan: ~18 frames</div><div>• Ball: essentially failed</div>
+    </div>
+   </div>
+   <div>
+    <div class="font-semibold mb-2">BoT-SORT Improved</div>
+    <div class="space-y-1 text-xs text-slate-400">
+     <div>• 1,487 unique IDs</div><div>• Ball visibility: 26.4%</div><div>• Median ball run: 2 frames</div>
+    </div>
+   </div>
+  </div>
+  <div class="text-xs text-amber-300/80 mt-3">⚠ 2-frame median ball run cannot support 75-frame possession inference.</div>
+ </div>
+</div>
+</section>
+
+<!-- ======== AUDIT ======== -->
+<section id="audit" class="py-10 px-4">
+<div class="max-w-6xl mx-auto">
+ <h2 class="stitle text-xl font-bold mb-6">Forensic Leakage Audit</h2>
+ <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+  <div class="glass rounded-xl p-3 metric-card"><div class="flex items-center gap-1.5 mb-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span><span class="text-[10px] font-bold text-emerald-400 uppercase">PASS</span></div><div class="text-sm font-semibold">Split Leakage</div><div class="text-[11px] text-slate-500 mt-1">100-frame purge. 0 overlap.</div></div>
+  <div class="glass rounded-xl p-3 metric-card"><div class="flex items-center gap-1.5 mb-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span><span class="text-[10px] font-bold text-emerald-400 uppercase">PASS</span></div><div class="text-sm font-semibold">Feature Causality</div><div class="text-[11px] text-slate-500 mt-1">center=False. All diffs backward.</div></div>
+  <div class="glass rounded-xl p-3 metric-card"><div class="flex items-center gap-1.5 mb-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span><span class="text-[10px] font-bold text-emerald-400 uppercase">PASS</span></div><div class="text-sm font-semibold">Target Integrity</div><div class="text-[11px] text-slate-500 mt-1">Future info for labels only, not features.</div></div>
+  <div class="glass rounded-xl p-3 metric-card"><div class="flex items-center gap-1.5 mb-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span><span class="text-[10px] font-bold text-emerald-400 uppercase">PASS</span></div><div class="text-sm font-semibold">Threshold</div><div class="text-[11px] text-slate-500 mt-1">0.15 frozen on validation only.</div></div>
+  <div class="glass rounded-xl p-3 metric-card"><div class="flex items-center gap-1.5 mb-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span><span class="text-[10px] font-bold text-emerald-400 uppercase">PASS</span></div><div class="text-sm font-semibold">Calibration</div><div class="text-[11px] text-slate-500 mt-1">No calibration wrapper used.</div></div>
+  <div class="glass rounded-xl p-3 metric-card"><div class="flex items-center gap-1.5 mb-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span><span class="text-[10px] font-bold text-emerald-400 uppercase">PASS</span></div><div class="text-sm font-semibold">Normalisation</div><div class="text-[11px] text-slate-500 mt-1">No global stats used.</div></div>
+ </div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-8 px-4 border-t border-white/5 mt-10">
+ <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-[10px] text-slate-600">
+  <div>MSc Data Science & AI — Turnover-Associated Press-Trigger Detection</div>
+  <div class="flex gap-3">Python 3.12 • scikit-learn 1.9 • kloppy 3.19 • Metrica Open Data</div>
+ </div>
+</footer>
+
+<script>
+// ======== DATA LOADING ========
+let trackingData=[], timelineData=[], resultsData={}, featData=[], sweepData=[], eventsData={};
+let playing=true, frameIdx=0, speed=2, animTimer=null;
+
+async function loadAll() {
+ try {
+  [trackingData, timelineData, resultsData, featData, sweepData, eventsData] = await Promise.all([
+   fetch('data/tracking.json').then(r=>r.json()),
+   fetch('data/timeline.json').then(r=>r.json()),
+   fetch('data/results.json').then(r=>r.json()),
+   fetch('data/features.json').then(r=>r.json()),
+   fetch('data/sweep.json').then(r=>r.json()),
+   fetch('data/events.json').then(r=>r.json()),
+  ]);
+  initPitch(); renderMetrics(); renderTimeline(); renderFeatures(); renderSweep();
+  document.getElementById('scrubber').max = trackingData.length - 1;
+  startAnimation();
+ } catch(e) { console.error('Data loading failed:', e); document.getElementById('frameInfo').textContent='Error loading data'; }
+}
+
+// ======== PITCH ========
+const pitchEl = document.getElementById('pitchEl');
+let homeDots=[], awayDots=[], ballDot;
+
+function initPitch() {
+ ballDot = document.createElement('div'); ballDot.className='ball'; pitchEl.appendChild(ballDot);
+ for(let i=0;i<14;i++){
+  let d=document.createElement('div'); d.className='player'; d.style.background='#3b82f6'; d.style.boxShadow='0 0 5px rgba(59,130,246,0.4)'; pitchEl.appendChild(d); homeDots.push(d);
+  let a=document.createElement('div'); a.className='player'; a.style.background='#ef4444'; a.style.boxShadow='0 0 5px rgba(239,68,68,0.4)'; pitchEl.appendChild(a); awayDots.push(a);
+ }
+}
+
+function renderFrame(idx) {
+ if(idx >= trackingData.length) { idx=0; frameIdx=0; }
+ const fr = trackingData[idx];
+ // Ball
+ if(fr.b[0]!=null) { ballDot.style.left=(fr.b[0]/105*100)+'%'; ballDot.style.top=(fr.b[1]/68*100)+'%'; ballDot.style.opacity='1'; }
+ else { ballDot.style.opacity='0.2'; }
+ // Players
+ for(let i=0;i<14;i++){
+  if(i<fr.hx.length){ homeDots[i].style.left=(fr.hx[i]/105*100)+'%'; homeDots[i].style.top=(fr.hy[i]/68*100)+'%'; homeDots[i].style.display='block'; }
+  else { homeDots[i].style.display='none'; }
+  if(i<fr.ax.length){ awayDots[i].style.left=(fr.ax[i]/105*100)+'%'; awayDots[i].style.top=(fr.ay[i]/68*100)+'%'; awayDots[i].style.display='block'; }
+  else { awayDots[i].style.display='none'; }
+ }
+ // Prob
+ const p = fr.p;
+ document.getElementById('probNum').textContent = p.toFixed(3);
+ document.getElementById('probNum').style.color = p>=0.15?'#22d3ee':'#64748b';
+ document.getElementById('probBar').style.width = (Math.min(p,1)*100)+'%';
+ document.getElementById('probBar').style.background = p>=0.15?'linear-gradient(90deg,#22d3ee,#818cf8)':'rgba(255,255,255,0.06)';
+ // GT/Pred
+ const gtEl=document.getElementById('gtLabel'), prEl=document.getElementById('predLabel');
+ gtEl.textContent=fr.gt?'ACTIVE':'—'; gtEl.style.color=fr.gt?'#34d399':'#64748b';
+ prEl.textContent=fr.pr?'TRIGGER':'—'; prEl.style.color=fr.pr?'#22d3ee':'#64748b';
+ // Info
+ document.getElementById('frameInfo').textContent=`Frame ${fr.f} / ${trackingData[trackingData.length-1].f} • ${(fr.f/25).toFixed(1)}s`;
+ document.getElementById('scrubber').value=idx;
+ // Live features (approximate from tracking)
+ if(fr.b[0]!=null && fr.hx.length>0) {
+  let dists = fr.hx.map((x,i)=>Math.hypot(x-fr.b[0], fr.hy[i]-fr.b[1])).sort((a,b)=>a-b);
+  document.getElementById('lf_d1').textContent = dists[0].toFixed(1)+'m';
+  document.getElementById('lf_pi').textContent = Math.max(0,1-dists[0]/10).toFixed(2);
+  document.getElementById('lf_5m').textContent = dists.filter(d=>d<=5).length;
+ }
+}
+
+function startAnimation() {
+ if(animTimer) clearInterval(animTimer);
+ animTimer = setInterval(()=>{ if(!playing) return; renderFrame(frameIdx); frameIdx++; if(frameIdx>=trackingData.length) frameIdx=0; }, 160/speed);
+}
+function togglePlay() { playing=!playing; document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play'; }
+function setSpeed(v) { speed=parseInt(v); startAnimation(); }
+document.getElementById('scrubber').addEventListener('input', e=>{ frameIdx=parseInt(e.target.value); renderFrame(frameIdx); });
+
+// ======== METRICS ========
+function renderMetrics() {
+ const r=resultsData;
+ const items=[
+  {v:r.event_f1, l:'Event F1', c:'text-cyan-300'},
+  {v:r.precision, l:'Precision', c:'text-indigo-300'},
+  {v:r.recall, l:'Recall', c:'text-emerald-300'},
+  {v:r.roc_auc, l:'ROC-AUC', c:'text-amber-300'},
+  {v:r.pr_auc, l:'PR-AUC', c:'text-rose-300'},
+  {v:`[${r.ci_low}, ${r.ci_high}]`, l:'95% CI', c:'text-slate-300', small:true},
+ ];
+ const grid=document.getElementById('metricsGrid');
+ items.forEach(i=>{
+  grid.innerHTML+=`<div class="glass rounded-xl p-3 text-center metric-card"><div class="${i.small?'text-base':'text-2xl'} font-bold ${i.c}">${typeof i.v==='number'?i.v.toFixed(3):i.v}</div><div class="text-[9px] text-slate-500 uppercase mt-1 tracking-wider">${i.l}</div></div>`;
+ });
+ // Event accounting
+ const ea=document.getElementById('eventAccounting');
+ ea.innerHTML=`
+  <div class="flex justify-between"><span class="text-slate-400">GT Events</span><span class="font-bold">${r.gt_events}</span></div>
+  <div class="flex justify-between"><span class="text-slate-400">Pred Events</span><span class="font-bold">${r.pred_events}</span></div>
+  <div class="h-px bg-white/5 my-1"></div>
+  <div class="flex justify-between"><span class="text-emerald-400">TP</span><span class="font-bold text-emerald-300">${r.tp}</span></div>
+  <div class="flex justify-between"><span class="text-rose-400">FP</span><span class="font-bold text-rose-300">${r.fp}</span></div>
+  <div class="flex justify-between"><span class="text-amber-400">FN</span><span class="font-bold text-amber-300">${r.fn}</span></div>
+  <div class="h-px bg-white/5 my-1"></div>
+  <div class="flex justify-between text-xs"><span class="text-slate-500">Train</span><span>${r.train_frames.toLocaleString()} fr</span></div>
+  <div class="flex justify-between text-xs"><span class="text-slate-500">Val</span><span>${r.val_frames.toLocaleString()} fr</span></div>
+  <div class="flex justify-between text-xs"><span class="text-slate-500">Test</span><span>${r.test_frames.toLocaleString()} fr</span></div>
+ `;
+}
+
+// ======== TIMELINE CHART ========
+function renderTimeline() {
+ const ctx=document.getElementById('timelineChart').getContext('2d');
+ const labels=timelineData.map(d=>(d.f/25).toFixed(0));
+ const probs=timelineData.map(d=>d.p);
+ const gts=timelineData.map(d=>d.gt*0.5);
+ new Chart(ctx,{
+  type:'line',
+  data:{
+   labels,
+   datasets:[
+    {label:'GT Region',data:gts,borderColor:'rgba(52,211,153,0.2)',backgroundColor:'rgba(52,211,153,0.08)',fill:true,pointRadius:0,borderWidth:0},
+    {label:'Smoothed Prob',data:probs,borderColor:'#22d3ee',backgroundColor:'transparent',fill:false,pointRadius:0,borderWidth:1.5},
+   ]
+  },
+  options:{
+   responsive:true, maintainAspectRatio:false,
+   plugins:{legend:{labels:{color:'#64748b',font:{size:10}}}},
+   scales:{
+    x:{ticks:{color:'#475569',font:{size:9},maxTicksLimit:15},grid:{color:'rgba(255,255,255,0.03)'},title:{display:true,text:'Time (seconds)',color:'#64748b',font:{size:10}}},
+    y:{min:0,max:0.6,ticks:{color:'#475569',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}}
+   },
+   annotation:{annotations:{threshold:{type:'line',yMin:0.15,yMax:0.15,borderColor:'rgba(251,191,36,0.4)',borderWidth:1,borderDash:[4,4]}}}
+  }
+ });
+}
+
+// ======== FEATURE IMPORTANCE ========
+function renderFeatures() {
+ const ctx=document.getElementById('featChart').getContext('2d');
+ const top=featData.slice(0,15);
+ new Chart(ctx,{
+  type:'bar',
+  data:{
+   labels:top.map(f=>f.name),
+   datasets:[{data:top.map(f=>f.importance),backgroundColor:top.map((_,i)=>`hsla(${180+i*8},70%,60%,0.6)`),borderRadius:4}]
+  },
+  options:{
+   indexAxis:'y', responsive:true, maintainAspectRatio:false,
+   plugins:{legend:{display:false}},
+   scales:{
+    x:{ticks:{color:'#64748b',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}},
+    y:{ticks:{color:'#94a3b8',font:{size:10}},grid:{display:false}}
+   }
+  }
+ });
+}
+
+// ======== SWEEP ========
+function renderSweep() {
+ const el=document.getElementById('sweepBars');
+ sweepData.forEach(d=>{
+  const best=d.w==='3.0s';
+  el.innerHTML+=`<div class="flex items-center gap-2">
+   <div class="w-8 text-right text-[11px] font-mono ${best?'text-cyan-300 font-bold':'text-slate-500'}">${d.w}</div>
+   <div class="flex-1 h-4 bg-white/5 rounded-full overflow-hidden"><div class="h-full rounded-full bar-fill" style="width:${(d.f1/0.7*100)}%;background:${best?'linear-gradient(90deg,#22d3ee,#818cf8)':'rgba(148,163,184,0.2)'}"></div></div>
+   <div class="w-10 text-right text-[11px] font-mono ${best?'text-cyan-300 font-bold':'text-slate-400'}">${d.f1.toFixed(3)}</div>
+  </div>`;
+ });
+}
+
+// ======== TABS ========
+function showExp(btn,id) {
+ document.querySelectorAll('[id^="exp-"]').forEach(e=>e.classList.add('hidden'));
+ document.getElementById('exp-'+id).classList.remove('hidden');
+ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+ btn.classList.add('on');
+}
+
+// ======== INIT ========
+loadAll();
+</script>
+</body>
+</html>
