@@ -1,0 +1,134 @@
+[
+  {
+    "name": "roll_hull_change",
+    "importance": 0.0779
+  },
+  {
+    "name": "def_block_width",
+    "importance": 0.0599
+  },
+  {
+    "name": "roll_pressure_max",
+    "importance": 0.0455
+  },
+  {
+    "name": "def_dispersion",
+    "importance": 0.0416
+  },
+  {
+    "name": "ball_speed",
+    "importance": 0.0309
+  },
+  {
+    "name": "numerical_advantage",
+    "importance": 0.0162
+  },
+  {
+    "name": "pressure_index",
+    "importance": 0.0162
+  },
+  {
+    "name": "roll_closing_mean",
+    "importance": 0.0082
+  },
+  {
+    "name": "def_dist_1",
+    "importance": 0.0062
+  },
+  {
+    "name": "centroid_dist",
+    "importance": 0.006
+  },
+  {
+    "name": "ball_y",
+    "importance": 0.0058
+  },
+  {
+    "name": "def_line_height",
+    "importance": 0.0052
+  },
+  {
+    "name": "closing_speed_max",
+    "importance": 0.0032
+  },
+  {
+    "name": "def_block_depth",
+    "importance": 0.0027
+  },
+  {
+    "name": "def_dist_3",
+    "importance": 0.0016
+  },
+  {
+    "name": "def_density_10m",
+    "importance": 0.0001
+  },
+  {
+    "name": "temp_accel",
+    "importance": 0.0
+  },
+  {
+    "name": "def_density_5m",
+    "importance": 0.0
+  },
+  {
+    "name": "passing_lane_occ",
+    "importance": 0.0
+  },
+  {
+    "name": "possession_dur",
+    "importance": 0.0
+  },
+  {
+    "name": "temp_hull_shrink",
+    "importance": 0.0
+  },
+  {
+    "name": "dist_to_sideline",
+    "importance": -0.0001
+  },
+  {
+    "name": "closing_speed_mean3",
+    "importance": -0.0001
+  },
+  {
+    "name": "viable_passing",
+    "importance": -0.0005
+  },
+  {
+    "name": "ball_x",
+    "importance": -0.0006
+  },
+  {
+    "name": "roll_pressure_mean",
+    "importance": -0.0011
+  },
+  {
+    "name": "dist_to_goal",
+    "importance": -0.0023
+  },
+  {
+    "name": "def_dist_mean3",
+    "importance": -0.0026
+  },
+  {
+    "name": "ball_progression_x",
+    "importance": -0.0027
+  },
+  {
+    "name": "def_dist_2",
+    "importance": -0.0042
+  },
+  {
+    "name": "roll_dist_min",
+    "importance": -0.0171
+  },
+  {
+    "name": "att_density_10m",
+    "importance": -0.0174
+  },
+  {
+    "name": "def_hull_area",
+    "importance": -0.029
+  }
+]

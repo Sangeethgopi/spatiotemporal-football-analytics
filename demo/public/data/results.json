@@ -1,0 +1,19 @@
+{
+  "event_f1": 0.6038,
+  "precision": 0.5333,
+  "recall": 0.6957,
+  "roc_auc": 0.8366,
+  "pr_auc": 0.2377,
+  "tp": 16,
+  "fp": 14,
+  "fn": 7,
+  "gt_events": 23,
+  "pred_events": 34,
+  "ci_low": 0.49,
+  "ci_high": 0.702,
+  "train_frames": 141156,
+  "val_frames": 100532,
+  "test_frames": 43129,
+  "threshold": 0.15,
+  "smoothing_s": 3.0
+}
