@@ -1,0 +1,9 @@
+{
+  "name": "press-trigger-demo",
+  "version": "1.0.0",
+  "description": "MSc Dissertation Demo - Turnover-Associated Press-Trigger Detection",
+  "scripts": {
+    "dev": "npx serve public",
+    "build": "echo 'Static site - no build needed'"
+  }
+}
